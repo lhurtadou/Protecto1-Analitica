@@ -1,0 +1,122 @@
+def calcular_respuesta(hour, temperature, humidity, wind_speed, visibility, solar_radiation, rainfall,
+                       season, holiday, functioning_day, dia_semana, mes, momento_dia):
+    
+    intercept = -519.1508
+    coef_hour = -33.2291
+    coef_temperature = 31.0865
+    coef_humidity = -7.5357
+    coef_wind_speed = 20.0417
+    coef_visibility = 0.0515
+    coef_solar_radiation = -54.0248
+    coef_rainfall = -54.8927
+
+    # Coeficientes de las dummies 
+    coef_season_spring = -158.6190
+    coef_season_summer = -161.6336
+    coef_season_winter = -203.9030
+
+    coef_holiday_no = 149.0102
+    coef_functioning_day_yes = 950.6409
+
+    # Coeficientes de los días de la semana (domingo como base)
+    coef_dia_lunes = 76.3742
+    coef_dia_martes = 108.1341
+    coef_dia_miercoles = 126.8639
+    coef_dia_jueves = 83.9170
+    coef_dia_viernes = 126.9637
+    coef_dia_sabado = 61.1942
+
+    # Coeficientes de los meses (abril como base)
+    coef_mes_enero = -70.2452
+    coef_mes_febrero = -132.6607
+    coef_mes_marzo = -53.5722
+    coef_mes_mayo = 151.8341
+    coef_mes_junio = 265.6610
+    coef_mes_julio = -122.8986
+    coef_mes_agosto = -304.3961
+    coef_mes_septiembre = -73.6818
+    coef_mes_octubre = 76.0774
+    coef_mes_noviembre = 2.6092
+    coef_mes_diciembre = -0.9971
+
+    # Coeficientes del momento del día (madrugada como base)
+    coef_momento_manana = 492.4773
+    coef_momento_tarde = 652.8155
+    coef_momento_noche = 1199.5221
+
+    Y = intercept
+
+    # Variables continuas
+    Y += coef_hour * hour
+    Y += coef_temperature * temperature
+    Y += coef_humidity * humidity
+    Y += coef_wind_speed * wind_speed
+    Y += coef_visibility * visibility
+    Y += coef_solar_radiation * solar_radiation
+    Y += coef_rainfall * rainfall
+
+    # Variables categóricas: Seasons (base: fall/otoño)
+    if season == 'spring':
+        Y += coef_season_spring
+    elif season == 'summer':
+        Y += coef_season_summer
+    elif season == 'winter':
+        Y += coef_season_winter
+
+    # Holiday (base: Holiday_Yes)
+    if holiday == 'No Holiday':
+        Y += coef_holiday_no
+
+    # Functioning Day (base: Functioning Day_No)
+    if functioning_day == 'Yes':
+        Y += coef_functioning_day_yes
+
+    # Día de la semana (base: domingo)
+    if dia_semana == 'lunes':
+        Y += coef_dia_lunes
+    elif dia_semana == 'martes':
+        Y += coef_dia_martes
+    elif dia_semana == 'miércoles':
+        Y += coef_dia_miercoles
+    elif dia_semana == 'jueves':
+        Y += coef_dia_jueves
+    elif dia_semana == 'viernes':
+        Y += coef_dia_viernes
+    elif dia_semana == 'sábado':
+        Y += coef_dia_sabado
+
+    # Mes (base: abril)
+    if mes == 'enero':
+        Y += coef_mes_enero
+    elif mes == 'febrero':
+        Y += coef_mes_febrero
+    elif mes == 'marzo':
+        Y += coef_mes_marzo
+    elif mes == 'mayo':
+        Y += coef_mes_mayo
+    elif mes == 'junio':
+        Y += coef_mes_junio
+    elif mes == 'julio':
+        Y += coef_mes_julio
+    elif mes == 'agosto':
+        Y += coef_mes_agosto
+    elif mes == 'septiembre':
+        Y += coef_mes_septiembre
+    elif mes == 'octubre':
+        Y += coef_mes_octubre
+    elif mes == 'noviembre':
+        Y += coef_mes_noviembre
+    elif mes == 'diciembre':
+        Y += coef_mes_diciembre
+
+    # Momento del día (base: madrugada)
+    if momento_dia == 'Mañana':
+        Y += coef_momento_manana
+    elif momento_dia == 'Tarde':
+        Y += coef_momento_tarde
+    elif momento_dia == 'Noche':
+        Y += coef_momento_noche
+
+    return Y
+Y = calcular_respuesta(14, 25, 60, 3.2, 2000, 2.5, 0.0, 'summer', 'No Holiday', 'Yes', 'lunes', 'enero', 'madrugada')
+print(round(Y,0))
